@@ -46,4 +46,9 @@ echo "🚚 Moving binary to $INSTALL_DIR..."
 sudo mv "/tmp/$BINARY_NAME" "$INSTALL_DIR/$BINARY_NAME"
 chmod +x "$INSTALL_DIR/$BINARY_NAME"
 
+EVA_DIR="$HOME/.eva"
+mkdir -p "$EVA_DIR"
+mv "/tmp/config.example.yaml" "$EVA_DIR/config.yaml"
+echo "📄 Config example placed at $EVA_DIR/config.yaml"
+
 echo "✅ Installed $BINARY_NAME $VERSION to $INSTALL_DIR"
