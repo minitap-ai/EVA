@@ -1,7 +1,7 @@
 notion_api_key: "secret_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 notion_database_id: "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 # Required scopes (same as gh CLI): repo, read:org
-github_token: "ghp_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+# github_token: "ghp_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 
 devops:
   iac:

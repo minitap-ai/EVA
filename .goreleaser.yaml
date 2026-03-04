@@ -24,6 +24,7 @@ archives:
     wrap_in_directory: false
     files:
       - README.md
+      - config.example.yaml
 
 checksum:
   name_template: "checksums.txt"

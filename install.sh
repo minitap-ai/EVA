@@ -46,4 +46,34 @@ echo "🚚 Moving binary to $INSTALL_DIR..."
 sudo mv "/tmp/$BINARY_NAME" "$INSTALL_DIR/$BINARY_NAME"
 chmod +x "$INSTALL_DIR/$BINARY_NAME"
 
+EVA_DIR="$HOME/.eva"
+mkdir -p "$EVA_DIR"
+mv "/tmp/config.example.yaml" "$EVA_DIR/config.example.yaml"
+
+printf "🔑 Enter your GitHub Personal Access Token (required scopes: repo, read:org): "
+stty -echo < /dev/tty
+read -r GH_PAT < /dev/tty
+stty echo < /dev/tty
+printf "\n"
+
+if [ -z "$GH_PAT" ]; then
+  echo "⚠  No token provided. Skipping config setup — edit $EVA_DIR/config.yaml manually."
+else
+  WRITE_CONFIG=true
+  if [ -f "$EVA_DIR/config.yaml" ]; then
+    printf "⚠  $EVA_DIR/config.yaml already exists. Overwrite? [y/N]: "
+    read -r CONFIRM < /dev/tty
+    case "$CONFIRM" in
+      y|Y) WRITE_CONFIG=true ;;
+      *)   WRITE_CONFIG=false; echo "📄 Existing config left untouched." ;;
+    esac
+  fi
+
+  if [ "$WRITE_CONFIG" = "true" ]; then
+    sed "s|github_token: \"ghp_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\"|github_token: \"$GH_PAT\"|" \
+      "$EVA_DIR/config.example.yaml" > "$EVA_DIR/config.yaml"
+    echo "📄 Config written to $EVA_DIR/config.yaml"
+  fi
+fi
+
 echo "✅ Installed $BINARY_NAME $VERSION to $INSTALL_DIR"
