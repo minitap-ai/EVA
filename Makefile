@@ -1,6 +1,6 @@
 BINARY_NAME=eva
 MAIN_PACKAGE=main.go
-GO_INSTALL_PATH=github.com/lucmahoux/eva
+GO_INSTALL_PATH=github.com/minitap-ai/eva
 
 ifneq (,$(wildcard .env))
 	include .env

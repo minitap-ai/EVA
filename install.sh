@@ -2,7 +2,7 @@
 
 set -e
 
-REPO="lucmahoux/eva"
+REPO="minitap-ai/eva"
 BINARY_NAME="eva"
 INSTALL_DIR="/usr/local/bin"
 VERSION=${VERSION:-latest}

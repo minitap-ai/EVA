@@ -7,7 +7,7 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/lucmahoux/eva/internal/config"
+	"github.com/minitap-ai/eva/internal/config"
 )
 
 type Task struct {
