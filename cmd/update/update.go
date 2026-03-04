@@ -13,7 +13,7 @@ func NewCommand() *cobra.Command {
 		Use:   "update",
 		Short: "Update eva to the latest version (via install.sh)",
 		Run: func(cmd *cobra.Command, args []string) {
-			installURL := "https://raw.githubusercontent.com/lucmahoux/eva/main/install.sh"
+			installURL := "https://raw.githubusercontent.com/minitap-ai/eva/main/install.sh"
 			fmt.Println("⬇️  Updating eva via:", installURL)
 
 			c := exec.Command("sh", "-c", fmt.Sprintf("curl -sSfL %s | sh", installURL))

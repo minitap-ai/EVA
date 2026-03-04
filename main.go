@@ -1,6 +1,6 @@
 package main
 
-import "github.com/lucmahoux/eva/cmd"
+import "github.com/minitap-ai/eva/cmd"
 
 func main() {
 	cmd.Execute()
