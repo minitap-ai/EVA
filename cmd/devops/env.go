@@ -80,15 +80,19 @@ func runEnvAdd(cmd *cobra.Command, args []string) {
 			entries[key] = envEntry{prod: val, dev: devVal}
 		}
 	} else {
+		_, hasDev := project.GitHubEnvironments["dev"]
 		for {
 			name := promptLine("🔑 Env var name (empty to finish): ")
 			if name == "" {
 				break
 			}
 			prodValue := promptLine("📦 PROD value: ")
-			devValue := promptLine("📦 DEV value (leave empty to use PROD value): ")
-			if devValue == "" {
-				devValue = prodValue
+			devValue := prodValue
+			if hasDev {
+				devValue = promptLine("📦 DEV value (leave empty to use PROD value): ")
+				if devValue == "" {
+					devValue = prodValue
+				}
 			}
 			entries[name] = envEntry{prod: prodValue, dev: devValue}
 		}
@@ -99,7 +103,7 @@ func runEnvAdd(cmd *cobra.Command, args []string) {
 		os.Exit(1)
 	}
 
-	envs := resolveEnvs(envFlag)
+	envs := resolveEnvs(envFlag, project.GitHubEnvironments)
 
 	switch project.EnvVars.IAC {
 	case "k8s":
@@ -146,7 +150,7 @@ func runEnvRm(cmd *cobra.Command, args []string) {
 		os.Exit(1)
 	}
 
-	envs := resolveEnvs(envFlag)
+	envs := resolveEnvs(envFlag, project.GitHubEnvironments)
 
 	switch project.EnvVars.IAC {
 	case "k8s":

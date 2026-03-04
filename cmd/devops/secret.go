@@ -80,15 +80,19 @@ func runSecretAdd(cmd *cobra.Command, args []string) {
 			entries[key] = secretEntry{prod: val, dev: devVal}
 		}
 	} else {
+		_, hasDev := project.GitHubEnvironments["dev"]
 		for {
 			name := promptLine("🔑 Secret name (empty to finish): ")
 			if name == "" {
 				break
 			}
 			prodValue := promptSecret("🔒 PROD secret value: ")
-			devValue := promptSecret("🔒 DEV secret value (leave empty to use PROD value): ")
-			if devValue == "" {
-				devValue = prodValue
+			devValue := prodValue
+			if hasDev {
+				devValue = promptSecret("🔒 DEV secret value (leave empty to use PROD value): ")
+				if devValue == "" {
+					devValue = prodValue
+				}
 			}
 			entries[name] = secretEntry{prod: prodValue, dev: devValue}
 		}
@@ -99,7 +103,7 @@ func runSecretAdd(cmd *cobra.Command, args []string) {
 		os.Exit(1)
 	}
 
-	envs := resolveEnvs(envFlag)
+	envs := resolveEnvs(envFlag, project.GitHubEnvironments)
 
 	switch project.Secrets.IAC {
 	case "terraform":
@@ -152,7 +156,7 @@ func runSecretRm(cmd *cobra.Command, args []string) {
 		os.Exit(1)
 	}
 
-	envs := resolveEnvs(envFlag)
+	envs := resolveEnvs(envFlag, project.GitHubEnvironments)
 
 	switch project.Secrets.IAC {
 	case "terraform":

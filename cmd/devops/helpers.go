@@ -62,15 +62,22 @@ func parseKVFlags(kvs []string) map[string]string {
 	return m
 }
 
-func resolveEnvs(envFlag string) []string {
-	switch envFlag {
-	case "prod":
-		return []string{"prod"}
-	case "dev":
-		return []string{"dev"}
-	default:
-		return []string{"prod", "dev"}
+// resolveEnvs returns the list of environments to process, constrained to those
+// present in the project's githubEnvironments config. If --env is specified it
+// is further filtered to that single environment.
+func resolveEnvs(envFlag string, configuredEnvs map[string]string) []string {
+	candidates := []string{"prod", "dev"}
+	if envFlag != "" {
+		candidates = []string{envFlag}
 	}
+
+	var result []string
+	for _, env := range candidates {
+		if _, ok := configuredEnvs[env]; ok {
+			result = append(result, env)
+		}
+	}
+	return result
 }
 
 // ensureAWSAuth verifies that the AWS CLI is authenticated. Exits with a helpful
