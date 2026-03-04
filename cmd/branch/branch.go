@@ -4,10 +4,10 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/lucmahoux/eva/internal/config"
-	"github.com/lucmahoux/eva/internal/git"
-	"github.com/lucmahoux/eva/internal/notion"
-	"github.com/lucmahoux/eva/internal/utils"
+	"github.com/minitap-ai/eva/internal/config"
+	"github.com/minitap-ai/eva/internal/git"
+	"github.com/minitap-ai/eva/internal/notion"
+	"github.com/minitap-ai/eva/internal/utils"
 	"github.com/spf13/cobra"
 )
 
@@ -21,6 +21,10 @@ func NewCommand() *cobra.Command {
 
 			cfg, err := config.Load()
 			if err != nil {
+				fmt.Println("❌", err)
+				os.Exit(1)
+			}
+			if err := cfg.RequireNotion(); err != nil {
 				fmt.Println("❌", err)
 				os.Exit(1)
 			}

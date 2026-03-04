@@ -4,10 +4,11 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/lucmahoux/eva/cmd/branch"
-	initcmd "github.com/lucmahoux/eva/cmd/init"
-	"github.com/lucmahoux/eva/cmd/open"
-	"github.com/lucmahoux/eva/cmd/update"
+	"github.com/minitap-ai/eva/cmd/branch"
+	devopscmd "github.com/minitap-ai/eva/cmd/devops"
+	initcmd "github.com/minitap-ai/eva/cmd/init"
+	"github.com/minitap-ai/eva/cmd/open"
+	"github.com/minitap-ai/eva/cmd/update"
 	"github.com/spf13/cobra"
 )
 
@@ -21,6 +22,7 @@ func Execute() {
 	rootCmd.AddCommand(open.NewCommand())
 	rootCmd.AddCommand(update.NewCommand())
 	rootCmd.AddCommand(initcmd.NewCommand())
+	rootCmd.AddCommand(devopscmd.NewCommand())
 
 	if err := rootCmd.Execute(); err != nil {
 		fmt.Println(err)
