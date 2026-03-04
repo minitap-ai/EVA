@@ -9,10 +9,14 @@ import (
 )
 
 type Config struct {
-	NotionAPIKey     string `yaml:"notion_api_key"`
-	NotionDatabaseID string `yaml:"notion_database_id"`
+	NotionAPIKey     string       `yaml:"notion_api_key"`
+	NotionDatabaseID string       `yaml:"notion_database_id"`
+	GitHubToken      string       `yaml:"github_token"`
+	Devops           DevopsConfig `yaml:"devops"`
 }
 
+// Load reads the config file and returns the parsed config.
+// It does NOT enforce any required fields — callers validate what they need.
 func Load() (*Config, error) {
 	homeDir, err := os.UserHomeDir()
 	if err != nil {
@@ -32,9 +36,13 @@ func Load() (*Config, error) {
 		return nil, fmt.Errorf("invalid config format: %w", err)
 	}
 
-	if cfg.NotionAPIKey == "" || cfg.NotionDatabaseID == "" {
-		return nil, fmt.Errorf("missing required fields in config (notion_api_key or notion_database_id)")
-	}
-
 	return &cfg, nil
+}
+
+// RequireNotion validates that Notion fields are present in the config.
+func (c *Config) RequireNotion() error {
+	if c.NotionAPIKey == "" || c.NotionDatabaseID == "" {
+		return fmt.Errorf("missing required fields in config (notion_api_key or notion_database_id)")
+	}
+	return nil
 }
