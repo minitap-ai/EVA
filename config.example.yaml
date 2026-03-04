@@ -27,6 +27,34 @@ devops:
       secretsKey: secrets
 
   projects:
+    - slugs: ["webapp"]
+      github: minitap-ai/minihands-webapp
+      healthUrl: https://app.minitap.ai/api/health
+      healthUrlDev: https://dev.minitap.ai/api/health
+      githubEnvironments:
+        prod: prod
+        dev: dev
+      secrets:
+        iac: terraform
+        cloudProvider: gcp
+        appName: minihands-webapp
+      envVars:
+        iac: k8s
+        appName: minihands-webapp
+
+    - slugs: ["cockpit"]
+      github: minitap-ai/minitap-cockpit
+      healthUrl: https://cockpit.app.minitap.ai/api/health
+      githubEnvironments:
+        prod: prod
+      secrets:
+        iac: terraform
+        cloudProvider: gcp
+        appName: minitap-cockpit
+      envVars:
+        iac: k8s
+        appName: minitap-cockpit
+
     - slugs: ["maas", "maas-api"]
       github: minitap-ai/maas-api
       healthUrl: https://platform.minitap.ai/api/health
@@ -41,6 +69,21 @@ devops:
       envVars:
         iac: k8s
         appName: maas-api
+
+    - slugs: ["apps-manager"]
+      github: minitap-ai/apps-manager
+      healthUrl: https://apps-manager.app.minitap.ai/api/health
+      healthUrlDev: https://apps-manager.dev.minitap.ai/api/health
+      githubEnvironments:
+        prod: prod
+        dev: dev
+      secrets:
+        iac: terraform
+        cloudProvider: gcp
+        appName: apps-manager
+      envVars:
+        iac: k8s
+        appName: apps-manager
 
     - slugs: ["integrations", "int"]
       github: minitap-ai/minihands-integrations
