@@ -1,0 +1,102 @@
+notion_api_key: "secret_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+notion_database_id: "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+# Required scopes (same as gh CLI): repo, read:org
+github_token: "ghp_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+
+devops:
+  iac:
+    terraform:
+      github: minitap-ai/terraform-iac
+      cloudProviders:
+        aws:
+          prod:
+            region: eu-west-3
+          dev:
+            region: eu-west-3
+        gcp:
+          prod:
+            secretsFile: layers/environments/prod/gke/secrets.tf
+            gcpProject: minitap-prod
+          dev:
+            secretsFile: layers/environments/dev/gke/secrets.tf
+            gcpProject: minitap-dev
+    k8s:
+      github: minitap-ai/k8s-apps
+      managedAppsDir: apps
+      envVarKey: env
+      secretsKey: secrets
+
+  projects:
+    - slugs: ["maas", "maas-api"]
+      github: minitap-ai/maas-api
+      healthUrl: https://platform.minitap.ai/api/health
+      healthUrlDev: https://dev.platform.minitap.ai/api/health
+      githubEnvironments:
+        prod: prod
+        dev: dev
+      secrets:
+        iac: terraform
+        cloudProvider: gcp
+        appName: maas-api
+      envVars:
+        iac: k8s
+        appName: maas-api
+
+    - slugs: ["integrations", "int"]
+      github: minitap-ai/minihands-integrations
+      healthUrl: https://integrations.app.minitap.ai/api/health
+      healthUrlDev: https://integrations.dev.minitap.ai/api/health
+      githubEnvironments:
+        prod: prod
+        dev: dev
+      secrets:
+        iac: terraform
+        cloudProvider: gcp
+        appName: minihands-integrations
+      envVars:
+        iac: k8s
+        appName: minihands-integrations
+
+    - slugs: ["orchestrator", "orch"]
+      github: minitap-ai/minihands-orchestrator
+      healthUrl: https://orchestrator.app.minitap.ai/api/health
+      healthUrlDev: https://orchestrator.dev.minitap.ai/api/health
+      githubEnvironments:
+        prod: prod
+        dev: dev
+      secrets:
+        iac: terraform
+        cloudProvider: aws
+        cloudProviderConfig:
+          secretsKey: "aws_compute.control_plane_secret_env_names"
+          envFile: layers/environments/prod/aws-minihands/main.tf
+          devEnvFile: layers/environments/dev/aws-minihands/main.tf
+      envVars:
+        iac: terraform
+        cloudProvider: aws
+        cloudProviderConfig:
+          envKey: "aws_compute.control_plane_environment_variables"
+          envFile: layers/environments/prod/aws-minihands/main.tf
+          devEnvFile: layers/environments/dev/aws-minihands/main.tf
+
+    - slugs: ["caas", "caas-api"]
+      github: minitap-ai/caas-api
+      healthUrl: https://caas.app.minitap.ai/api/v1/health
+      healthUrlDev: https://caas.dev.minitap.ai/api/v1/health
+      githubEnvironments:
+        prod: prod
+        dev: dev
+      secrets:
+        iac: terraform
+        cloudProvider: aws
+        cloudProviderConfig:
+          secretsKey: "caas_api.caas_api_secret_env_names"
+          envFile: layers/environments/prod/aws-minihands/main.tf
+          devEnvFile: layers/environments/dev/aws-minihands/main.tf
+      envVars:
+        iac: terraform
+        cloudProvider: aws
+        cloudProviderConfig:
+          envKey: "caas_api.caas_api_environment_variables"
+          envFile: layers/environments/prod/aws-minihands/main.tf
+          devEnvFile: layers/environments/dev/aws-minihands/main.tf
