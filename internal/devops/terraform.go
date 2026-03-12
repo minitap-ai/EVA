@@ -304,17 +304,19 @@ func EditGCPSecretsFile(filePath, appName, secretName string) error {
 	appRe := regexp.MustCompile(
 		`(?s)(` + regexp.QuoteMeta(appName) + `\s*=\s*\[)(.*?)(\])`,
 	)
-	if !appRe.MatchString(current) {
+	match := appRe.FindStringSubmatch(current)
+	if match == nil {
 		return fmt.Errorf("app %q not found in secrets locals in %s", appName, filePath)
 	}
 
+	// Check only within the app's array, not the entire secrets object
 	alreadyRe := regexp.MustCompile(`"` + regexp.QuoteMeta(secretName) + `"`)
-	if alreadyRe.MatchString(current) {
+	if alreadyRe.MatchString(match[2]) {
 		return nil
 	}
 
-	updated := appRe.ReplaceAllStringFunc(current, func(match string) string {
-		sub := appRe.FindStringSubmatch(match)
+	updated := appRe.ReplaceAllStringFunc(current, func(m string) string {
+		sub := appRe.FindStringSubmatch(m)
 		entry := fmt.Sprintf("\n      %q,", secretName)
 		return sub[1] + strings.TrimRight(sub[2], " \t\n") + entry + "\n    " + sub[3]
 	})

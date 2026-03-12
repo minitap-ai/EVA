@@ -220,6 +220,27 @@ func handleGCPSecret(cfg *config.Config, project *config.ProjectConfig, entries 
 		return err
 	}
 
+	// Update k8s-apps values.yaml with the new secrets
+	k8sCfg := cfg.Devops.IAC.K8s
+	if k8sCfg.GitHub != "" && k8sCfg.SecretsKey != "" {
+		k8sRepoDir, err := devops.CloneOrPull(k8sCfg.GitHub)
+		if err != nil {
+			return err
+		}
+		for _, env := range envs {
+			for name := range entries {
+				fmt.Printf("✏️  Adding secret %s to k8s values.yaml (%s)...\n", name, env)
+				if err := devops.EditK8sSecret(k8sRepoDir, k8sCfg.ManagedAppsDir, appName, env, k8sCfg.SecretsKey, name); err != nil {
+					return err
+				}
+			}
+		}
+		confirmDiff(k8sRepoDir, yes)
+		if err := devops.CommitAndPush(k8sRepoDir, fmt.Sprintf("chore: add secrets %s for %s", names, appName)); err != nil {
+			return err
+		}
+	}
+
 	gcpProjectForEnv := map[string]string{
 		"prod": gcp.Prod.GCPProject,
 		"dev":  gcp.Dev.GCPProject,
