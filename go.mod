@@ -5,7 +5,7 @@ go 1.23.6
 require (
 	github.com/hashicorp/hcl/v2 v2.24.0
 	github.com/jedib0t/go-pretty/v6 v6.7.8
-	github.com/spf13/cobra v1.9.1
+	github.com/spf13/cobra v1.10.2
 	gopkg.in/yaml.v3 v3.0.1
 )
 
@@ -17,7 +17,7 @@ require (
 	github.com/mattn/go-runewidth v0.0.16 // indirect
 	github.com/mitchellh/go-wordwrap v1.0.1 // indirect
 	github.com/rivo/uniseg v0.4.7 // indirect
-	github.com/spf13/pflag v1.0.6 // indirect
+	github.com/spf13/pflag v1.0.9 // indirect
 	github.com/zclconf/go-cty v1.17.0 // indirect
 	golang.org/x/mod v0.17.0 // indirect
 	golang.org/x/sync v0.14.0 // indirect
